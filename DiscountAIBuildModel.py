@@ -1,5 +1,3 @@
-from flask import Flask, request, jsonify
-from flask_restful import Resource, Api
 import pyodbc
 import pandas as pd
 from datetime import datetime as dt
@@ -23,9 +21,7 @@ class OutputData:
         return f"{self.UserID},{self.ProductType},{self.Day}"
     def to_dict(self):
         return {'UserID':self.UserID,'ProductType':self.ProductType,'Approximate Day':self.Day}
-
-
-app = Flask(__name__)
+    
 connectionstring = r'Driver=ODBC Driver 17 for SQL Server;Server=INPUT YOUR SERVER HERE;Database=INPUT YOUR DATABASE HERE;Trusted_Connection=yes;' #connection strings, Driver is important.
 TheDBConnection= pyodbc.connect(connectionstring)
 ReadDataResult = pd.read_sql("Select ApplicationUsers_Id as UserID, tb_ProductCategories.Tiltle as ProductType, tb_Order.CreatedDate as DayBuy FROM tb_OrderDetail LEFT JOIN tb_Product ON tb_OrderDetail.ProductId=tb_Product.Id RIGHT JOIN tb_Order ON tb_Order.Id=tb_OrderDetail.OrderId INNER JOIN tb_ProductCategories ON tb_ProductCategories.Id=tb_Product.ProductCategoryId",TheDBConnection)
@@ -109,6 +105,3 @@ print(ListOutputData)
 dfout = pd.DataFrame([x.to_dict() for x in ListOutputData])
 dfout = dfout.set_index('UserID')
 dfout.to_excel("DiscountModel.xlsx",sheet_name='FinalModel') #final result
-                    
-#if __name__ == '__main__':
-#     app.run(debug=True)   
