@@ -22,7 +22,6 @@ class OutputData:
     def to_dict(self):
         return {'UserID':self.UserID,'ProductType':self.ProductType,'Approximate Day':self.Day}
     
-connectionstring = r'Driver=ODBC Driver 17 for SQL Server;Server=INPUT YOUR SERVER HERE;Database=INPUT YOUR DATABASE HERE;Trusted_Connection=yes;' #connection strings, Driver is important.
 TheDBConnection= pyodbc.connect(connectionstring)
 ReadDataResult = pd.read_sql("Select ApplicationUsers_Id as UserID, tb_ProductCategories.Tiltle as ProductType, tb_Order.CreatedDate as DayBuy FROM tb_OrderDetail LEFT JOIN tb_Product ON tb_OrderDetail.ProductId=tb_Product.Id RIGHT JOIN tb_Order ON tb_Order.Id=tb_OrderDetail.OrderId INNER JOIN tb_ProductCategories ON tb_ProductCategories.Id=tb_Product.ProductCategoryId",TheDBConnection)
 #FULL QUERY:
@@ -90,7 +89,7 @@ ListOutputData = []
 #Main program
 while ListRawData != []:
     for object in ListRawData:
-        if(ListOutputData == [] and ListProcessingData == []):
+        if(ListOutputData == [] or ListProcessingData == []):
             ListProcessingData.append(RawData(object.UserID,object.ProductType,object.DayCreated))
             ListRawData.remove(object)
         elif(ListProcessingData!=[] and 
