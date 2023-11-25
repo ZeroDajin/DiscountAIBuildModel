@@ -1,0 +1,18 @@
+from surprise import dump
+
+# Save the trained model to a file
+file_path = 'path_to_save_model.pkl'
+dump.dump(file_path, algo=algo)
+
+
+from surprise import dump
+
+# Load the trained model from the file
+file_path = 'path_to_save_model.pkl'
+loaded_algo, loaded_trainset = dump.load(file_path)
+
+# Make predictions using the loaded model
+predictions = loaded_algo.test(testset)
+
+# Evaluate the model's accuracy
+accuracy.rmse(predictions)

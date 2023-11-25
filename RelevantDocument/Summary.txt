@@ -1,0 +1,50 @@
+import pandas as pd
+from surprise import Dataset, Reader
+from surprise import KNNBasic
+from surprise.model_selection import train_test_split
+from surprise import accuracy
+
+# Load the dataset into a pandas DataFrame
+# Replace 'path_to_your_dataset.csv' with the actual path to your dataset
+data = pd.read_csv('path_to_your_dataset.csv')
+
+# Define the Reader object to parse the dataframe
+reader = Reader(rating_scale=(0, 1))
+
+# Load the dataset from the pandas DataFrame
+dataset = Dataset.load_from_df(data[['user_id', 'item_id', 'purchase_history']], reader)
+
+# Split the dataset into training and testing sets
+trainset, testset = train_test_split(dataset, test_size=0.2)
+
+# Use the KNNBasic algorithm for collaborative filtering
+algo = KNNBasic()
+
+# Train the algorithm on the training set
+algo.fit(trainset)
+
+# Make predictions on the testing set
+predictions = algo.test(testset)
+
+# Evaluate the model's accuracy
+accuracy.rmse(predictions)
+
+# Assuming 'new_user_id' represents the ID of the new user who made a purchase
+# Replace 'new_user_id' with the actual ID of the new user
+new_user_id = 'new_user_id'
+
+# Find the k most similar users to the new user
+# Replace 'k' with the number of similar users you want to consider
+similar_users = algo.get_neighbors(new_user_id, k=10)
+
+# Get the items purchased by the similar users
+similar_user_purchases = []
+for user_id in similar_users:
+    user_purchases = data[data['user_id'] == user_id]['item_id'].tolist()
+    similar_user_purchases.extend(user_purchases)
+
+# Recommend items based on the purchases of similar users
+# You can use various strategies such as most popular items among similar users or items frequently co-purchased
+# For example, you can use Counter to find the most common items among similar_user_purchases
+from collections import Counter
+recommended_items = [item for item, _ in Counter(similar_user_purchases).most_common(10)]
