@@ -145,13 +145,13 @@ ReadDataResult = pd.read_sql_query("Select	ApplicationUsers_Id as UserID, tb_Ord
 #######################################
 #Formatting the Query results
 df = pd.DataFrame(ReadDataResult)
-df.to_csv(r'E:\Zero\Study\DoAnChuyenNganh\Python\API\DiscountAIBuildModel\CSVFiles\ReadytoReadModel.csv',index=False)
+df.to_csv(r'CSVFiles\ReadytoReadModel.csv',index=False)
 ReadDataResult = pd.read_sql_query("Select Id as ProductID, Title, ProductCategoryId as Category FROM tb_Product",TheDBConnection)
 df = pd.DataFrame(ReadDataResult)
-df.to_csv(r'E:\Zero\Study\DoAnChuyenNganh\Python\API\DiscountAIBuildModel\CSVFiles\ProductsList.csv',index=False)
+df.to_csv(r'CSVFiles\ProductsList.csv',index=False)
 #Inputs
-PurchaseHistory = pd.read_csv("E:\Zero\Study\DoAnChuyenNganh\Python\API\DiscountAIBuildModel\CSVFiles\ReadytoReadModel.csv")
-ProductsList = pd.read_csv("E:\Zero\Study\DoAnChuyenNganh\Python\API\DiscountAIBuildModel\CSVFiles\ProductsList.csv")
+PurchaseHistory = pd.read_csv("CSVFiles\ReadytoReadModel.csv")
+ProductsList = pd.read_csv("CSVFiles\ProductsList.csv")
 PurchaseHistory = pd.DataFrame(PurchaseHistory) #initializing dataframes.
 ProductsList = pd.DataFrame(ProductsList)
 FullPurchaseHistory = PurchaseHistory
